@@ -31,6 +31,7 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="jGp-YO-gpZ">
                                                     <rect key="frame" x="16" y="4" width="361" height="216"/>
+                                                    <color key="backgroundColor" name="YP Black"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                             <integer key="value" value="16"/>
@@ -51,6 +52,7 @@
                                                     <state key="normal" image="like_button_on"/>
                                                 </button>
                                             </subviews>
+                                            <color key="backgroundColor" name="YP Black"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="jGp-YO-gpZ" secondAttribute="trailing" constant="16" id="2bz-nu-l2a"/>
                                                 <constraint firstItem="jGp-YO-gpZ" firstAttribute="trailing" secondItem="f5D-40-p3L" secondAttribute="trailing" id="Xtf-Fj-3Uk"/>

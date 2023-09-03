@@ -34,7 +34,10 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        imageListCell.configCell(with: photosName[indexPath.row], with: indexPath)
+        let image = UIImage(named: photosName[indexPath.row]) ?? UIImage()
+        let isLiked = indexPath.row % 2 == 0
+        
+        imageListCell.configCell(image: image, date: Date().dateTimeString, isLiked: isLiked)
         return imageListCell
     }
 }
