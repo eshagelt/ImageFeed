@@ -65,7 +65,7 @@
                                                 <constraint firstItem="f5D-40-p3L" firstAttribute="top" secondItem="jGp-YO-gpZ" secondAttribute="top" id="xDU-C4-lh9"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="labelColor"/>
+                                        <color key="backgroundColor" name="YP Black"/>
                                         <connections>
                                             <outlet property="cellImage" destination="jGp-YO-gpZ" id="SYC-co-UIx"/>
                                             <outlet property="dateLabel" destination="tBs-Cl-xgO" id="1bw-L6-1SE"/>
