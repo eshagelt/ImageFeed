@@ -16,10 +16,10 @@ final class SingleImageViewController: UIViewController {
         }
     }
     
-    @IBOutlet var scrollView: UIScrollView!
-    @IBOutlet var imageView: UIImageView!
-    @IBOutlet var backButton: UIButton!
-    @IBOutlet var shareButton: UIButton!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet private var imageView: UIImageView!
+    @IBOutlet private var backButton: UIButton!
+    @IBOutlet private var shareButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,8 +54,8 @@ final class SingleImageViewController: UIViewController {
         scrollView.setZoomScale(scale, animated: false)
         scrollView.layoutIfNeeded()
         let newContentSize = scrollView.contentSize
-        let x = (newContentSize.width - visibleRectSize.width)
-        let y = (newContentSize.height - visibleRectSize.height)
+        let x = (newContentSize.width - visibleRectSize.width) / 2
+        let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
 }
