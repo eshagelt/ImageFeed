@@ -17,6 +17,7 @@ final class ImagesListCell: UITableViewCell {
     func configCell(image: UIImage, date: String, isLiked: Bool) {
         
         cellImage?.image = image
+        backgroundColor = UIColor(named: "YP Black")
         dateLabel.text = Date().dateTimeString
         let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
         likeButton.setImage(likeImage, for: .normal)
