@@ -31,7 +31,6 @@ final class SplashViewController: UIViewController {
 extension SplashViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showAutentificationScreenSegueIdentifier {
-            print("navigate to auth")
             guard let navigationController = segue.destination as? UINavigationController,
                 let viewController = navigationController.viewControllers[0] as? AuthViewController
             else { fatalError("Failed to prepare for \(showAutentificationScreenSegueIdentifier)")}
@@ -52,8 +51,7 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
     
     private func switchToTabBarController() {
-        print("switch to bars")
-
+    
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration")
         }
         
