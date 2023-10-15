@@ -8,13 +8,9 @@
 import UIKit
 import WebKit
 
-class WebViewViewController: UIViewController {
+final class WebViewViewController: UIViewController {
     
     @IBOutlet private var webView: WKWebView!
-    
-    @IBAction private func didTapBackButton(_ sender: Any) {
-        delegate?.webViewViewControllerDidCancel(self)
-    }
     
     @IBOutlet private var progressView: UIProgressView!
 
