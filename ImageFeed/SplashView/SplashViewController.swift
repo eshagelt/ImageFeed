@@ -5,6 +5,7 @@
 //  Created by Анастасия on 09.10.2023.
 //
 import UIKit
+import ProgressHUD
 
 final class SplashViewController: UIViewController {
     
@@ -12,6 +13,8 @@ final class SplashViewController: UIViewController {
     
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -46,6 +49,7 @@ extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
+            UIBlockingProgressHUD.show()
             self.fetchOAuthToken(code)
         }
     }
@@ -62,14 +66,47 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
     
     private func fetchOAuthToken(_ code: String) {
-        oauth2Service.fetchOAuthToken(code) { [weak self] result in
+        oauth2Service.fetchAuthToken(code) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success:
-                self.switchToTabBarController()
+            case .success(let authToken):
+                self.fetchProfile(authToken)
             case .failure:
+                UIBlockingProgressHUD.dismiss()
+                self.showAlert()
                 break
             }
         }
+    }
+    
+    private func fetchProfile(_ authToken: String) {
+        UIBlockingProgressHUD.show()
+        
+        profileService.fetchProfile(authToken: authToken) { [weak self ] result in
+            guard let self = self else { return }
+            
+            UIBlockingProgressHUD.dismiss()
+            switch result {
+            case .success:
+                guard let username = self.profileService.profile?.username else { return }
+                self.profileImageService.fetchProfileImageURL(username: username) { _ in }
+                self.switchToTabBarController()
+            case .failure:
+                self.showAlert()
+                break
+            }
+        }
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "Что-то пошло не так :(",
+                                      message: "Не удалось войти в систему",
+                                      preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default) { _ in
+            alert.dismiss(animated: true)
+        }
+        
+        alert.addAction(action)
+        self.present(alert, animated: true)
     }
 }

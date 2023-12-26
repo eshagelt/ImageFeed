@@ -11,15 +11,13 @@ import WebKit
 final class WebViewViewController: UIViewController {
     
     @IBOutlet private var webView: WKWebView!
-    
     @IBOutlet private var progressView: UIProgressView!
-
     
+    private var estimatedProgressObservation: NSKeyValueObservation?
     weak var delegate: WebViewViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         webView.navigationDelegate = self
         
         var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
@@ -40,22 +38,13 @@ final class WebViewViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
-        
-        updateProgress()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(true)
-        
-        webView.removeObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            context: nil)
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             })
     }
 }
 

@@ -6,8 +6,12 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
+    
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     
     private let avatarImageView = UIImageView()
     private let logoutButton = UIButton.systemButton(
@@ -20,11 +24,25 @@ final class ProfileViewController: UIViewController {
     private let loginNameLabel = UILabel()
     private let descriptionLabel = UILabel()
     
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.DidChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
+        
         setUpView()
         setUpConstraints()
+        updateProfileDetails(profile: profileService.profile)
     }
     
     private func setUpView() {
@@ -80,5 +98,30 @@ final class ProfileViewController: UIViewController {
     @objc
     private func didTapButton() {
     
+    }
+}
+
+extension ProfileViewController {
+    private func updateProfileDetails(profile: Profile?) {
+        guard let profile = profile else { return }
+        nameLabel.text = profile.name
+        loginNameLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
+    }
+}
+
+extension ProfileViewController {
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        avatarImageView.kf.indicatorType = .activity
+        avatarImageView.kf.setImage(with: url,
+                                 placeholder: UIImage(named: "placeholder"),
+                                    options: [.processor(processor)])
+        avatarImageView.layer.cornerRadius = 35
+        avatarImageView.layer.masksToBounds = true
     }
 }
