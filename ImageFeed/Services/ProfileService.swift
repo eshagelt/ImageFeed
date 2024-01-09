@@ -46,12 +46,11 @@ final class ProfileService {
 
 extension ProfileService {
     private func makeRequest(token: String) -> URLRequest? {
-        var request = URLRequest.makeHTTPRequest(
-                    path: "/me",
-                    httpMethod: "GET",
-                    baseURL: URL(string: "https://unsplash.com")!)
-                    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-                return request
+        guard let url = URL(string: "\(DefaultBaseApiUrl)" + "/me") else {
+            fatalError("Failed to create URL") }
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
     }
 }
 

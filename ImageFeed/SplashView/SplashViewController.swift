@@ -32,14 +32,14 @@ final class SplashViewController: UIViewController {
         if oauth2TokenStorage.token != nil {
             guard let authToken = oauth2TokenStorage.token else { return }
             fetchProfile(authToken)
+            // switchToTabBarController()
         } else {
             showAuthViewController()
         }
     }
     
     private func showAuthViewController() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+        guard let authViewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
         authViewController.delegate = self
         authViewController.modalPresentationStyle = .fullScreen
         self.present(authViewController, animated: true)
@@ -87,7 +87,6 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .success(let authToken):
                 self.fetchProfile(authToken)
             case .failure:
-                UIBlockingProgressHUD.dismiss()
                 self.showAlert()
                 break
             }
@@ -95,9 +94,7 @@ extension SplashViewController: AuthViewControllerDelegate {
         }
     }
     
-    private func fetchProfile(_ authToken: String) {
-        UIBlockingProgressHUD.show()
-        
+    private func fetchProfile(_ authToken: String) {        
         profileService.fetchProfile(authToken: authToken) { [weak self ] result in
             guard let self = self else { return }
             
@@ -105,9 +102,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .success:
                 guard let username = self.profileService.profile?.username else { return }
                 self.profileImageService.fetchProfileImageURL(username: username) { _ in }
-                DispatchQueue.main.async {
-                    self.switchToTabBarController()
-                }
+                self.switchToTabBarController()
             case .failure:
                 self.showAlert()
                 break

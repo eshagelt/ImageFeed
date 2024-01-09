@@ -41,9 +41,8 @@ final class OAuth2Service {
             
             switch result {
                 case .success(let body):
-                    let authToken = body.accessToken
-                    self.authToken = authToken
-                    completion(.success(authToken))
+                    tokenStorage.token = body.accessToken
+                    completion(.success(body.accessToken))
                 case .failure(let error):
                     completion(.failure(error))
 
@@ -75,7 +74,7 @@ extension URLRequest {
         httpMethod: String,
         baseURL: URL = DefaultBaseUrl
     ) -> URLRequest {
-        var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
+        var request = URLRequest(url: URL(string: path, relativeTo: baseURL) ?? DefaultBaseUrl)
         request.httpMethod = httpMethod
         return request
     }
