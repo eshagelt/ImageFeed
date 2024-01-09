@@ -34,6 +34,7 @@
 		5DA45E772AA49EEE0002DC9A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA45E762AA49EEE0002DC9A /* Colors.swift */; };
 		5DA45E7A2AAF3E400002DC9A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA45E792AAF3E400002DC9A /* ProfileViewController.swift */; };
 		5DA45E7E2AB0FFA30002DC9A /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA45E7D2AB0FFA30002DC9A /* SingleImageViewController.swift */; };
+		5DBE29772B3DDA0E003EBECE /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBE29762B3DDA0E003EBECE /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		5DA45E762AA49EEE0002DC9A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		5DA45E792AAF3E400002DC9A /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		5DA45E7D2AB0FFA30002DC9A /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
+		5DBE29762B3DDA0E003EBECE /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				5D5B970F2A9B5E190064511F /* SceneDelegate.swift */,
 				5DA45E782AAF3E1D0002DC9A /* Profile */,
 				5DA45E732AA49E8D0002DC9A /* Helpers */,
+				5DBE29762B3DDA0E003EBECE /* TabBarController.swift */,
 				5D9FFA0C2AE41B540034F00A /* UIBlockingProgressHUD.swift */,
 				5D5B97132A9B5E190064511F /* Main.storyboard */,
 				5D5B97162A9B5E1B0064511F /* Assets.xcassets */,
@@ -277,6 +280,7 @@
 				5D5B97422A9F90280064511F /* ImagesListCell.swift in Sources */,
 				5DA45E7A2AAF3E400002DC9A /* ProfileViewController.swift in Sources */,
 				5D5B970E2A9B5E190064511F /* AppDelegate.swift in Sources */,
+				5DBE29772B3DDA0E003EBECE /* TabBarController.swift in Sources */,
 				5DA45E7E2AB0FFA30002DC9A /* SingleImageViewController.swift in Sources */,
 				5D5B97102A9B5E190064511F /* SceneDelegate.swift in Sources */,
 				5D9FFA102AE444B90034F00A /* ProfileService.swift in Sources */,

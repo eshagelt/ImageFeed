@@ -9,21 +9,40 @@ import ProgressHUD
 
 final class SplashViewController: UIViewController {
     
-    private let showAutentificationScreenSegueIdentifier = "ShowAuthenticationScreen"
-    
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     
+    private var unsplashLogoImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "splash_screen_logo")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupSplashView()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if oauth2TokenStorage.token != nil {
-            switchToTabBarController()
+            guard let authToken = oauth2TokenStorage.token else { return }
+            fetchProfile(authToken)
         } else {
-            performSegue(withIdentifier: showAutentificationScreenSegueIdentifier, sender: nil)
+            showAuthViewController()
         }
+    }
+    
+    private func showAuthViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+        authViewController.delegate = self
+        authViewController.modalPresentationStyle = .fullScreen
+        self.present(authViewController, animated: true)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -31,21 +50,17 @@ final class SplashViewController: UIViewController {
     }
 }
 
-extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showAutentificationScreenSegueIdentifier {
-            guard let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else { fatalError("Failed to prepare for \(showAutentificationScreenSegueIdentifier)")}
-            
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
-    }
-}
-
 extension SplashViewController: AuthViewControllerDelegate {
+    private func setupSplashView() {
+        view.backgroundColor = .ypBackground
+        view.addSubview(unsplashLogoImage)
+        
+        NSLayoutConstraint.activate([
+            unsplashLogoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            unsplashLogoImage.centerYAnchor.constraint(equalTo: view.centerYAnchor)])
+    }
+    
+    
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
@@ -76,6 +91,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.showAlert()
                 break
             }
+            UIBlockingProgressHUD.dismiss()
         }
     }
     
@@ -85,16 +101,18 @@ extension SplashViewController: AuthViewControllerDelegate {
         profileService.fetchProfile(authToken: authToken) { [weak self ] result in
             guard let self = self else { return }
             
-            UIBlockingProgressHUD.dismiss()
             switch result {
             case .success:
                 guard let username = self.profileService.profile?.username else { return }
                 self.profileImageService.fetchProfileImageURL(username: username) { _ in }
-                self.switchToTabBarController()
+                DispatchQueue.main.async {
+                    self.switchToTabBarController()
+                }
             case .failure:
                 self.showAlert()
                 break
             }
+            UIBlockingProgressHUD.dismiss()
         }
     }
     
