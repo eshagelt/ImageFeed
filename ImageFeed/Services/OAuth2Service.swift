@@ -74,7 +74,8 @@ extension URLRequest {
         httpMethod: String,
         baseURL: URL = DefaultBaseUrl
     ) -> URLRequest {
-        var request = URLRequest(url: URL(string: path, relativeTo: baseURL) ?? DefaultBaseUrl)
+
+        var request = URLRequest(url: URL(string: path, relativeTo: baseURL) ?? baseURL)
         request.httpMethod = httpMethod
         return request
     }

@@ -22,7 +22,7 @@ final class ProfileService {
         if profile != nil { return }
         task?.cancel()
         
-        guard let request = makeRequest(token: authToken) else { return }
+        guard let request = makeRequest(token: authToken, path: "/me") else { return }
         
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self = self else { return }
@@ -45,10 +45,8 @@ final class ProfileService {
 }
 
 extension ProfileService {
-    private func makeRequest(token: String) -> URLRequest? {
-        guard let url = URL(string: "\(DefaultBaseApiUrl)" + "/me") else {
-            fatalError("Failed to create URL") }
-        var request = URLRequest(url: url)
+    private func makeRequest(token: String, path: String) -> URLRequest? {
+        var request = URLRequest.makeHTTPRequest(path: path, httpMethod: "GET")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
