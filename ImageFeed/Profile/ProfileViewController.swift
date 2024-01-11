@@ -14,11 +14,23 @@ final class ProfileViewController: UIViewController {
     private let profileImageService = ProfileImageService.shared
     
     private let avatarImageView = UIImageView()
-    private let logoutButton = UIButton.systemButton(
-        with: UIImage(named: "logoutButton") ?? UIImage(systemName: "ipad.and.arrow.forward")!,
-        target: ProfileViewController.self,
-        action: #selector(Self.didTapButton)
-    )
+//    private let logoutButton = UIButton.systemButton(
+//        with: UIImage(named: "logoutButton") ?? UIImage(systemName: "ipad.and.arrow.forward")!,
+//        target: ProfileViewController.self,
+//        action: #selector(Self.didTapButton)
+//    )
+    
+    private lazy var logoutButton: UIButton = {
+        let button = UIButton.systemButton(
+            with: UIImage(named: "logoutButton") ?? UIImage(systemName: "ipad.and.arrow.forward")!,
+            target: self,
+            action: #selector(didTapButton)
+        )
+   //     button.addAction(UIAction(title: "Button Title", handler: { _ in
+     //       print("Button tapped!")
+       // }), for: .touchUpInside)
+        return button
+    }()
     
     private let nameLabel = UILabel()
     private let loginNameLabel = UILabel()
@@ -55,19 +67,19 @@ final class ProfileViewController: UIViewController {
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoutButton)
         
-        nameLabel.text = "Екатерина Новикова"
+        nameLabel.text = profileService.profile?.name
         nameLabel.textColor = UIColor(named: "YP White")
         nameLabel.font = .systemFont(ofSize: 23, weight: UIFont.Weight.bold)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(nameLabel)
         
-        loginNameLabel.text = "@katerina_nov"
+        loginNameLabel.text = profileService.profile?.loginName
         loginNameLabel.textColor = UIColor(named: "YP Gray")
         loginNameLabel.font = .systemFont(ofSize: 13)
         loginNameLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(loginNameLabel)
         
-        descriptionLabel.text = "Hello, world!"
+        descriptionLabel.text = profileService.profile?.bio
         descriptionLabel.textColor = UIColor(named: "YP White")
         descriptionLabel.font = .systemFont(ofSize: 13)
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false

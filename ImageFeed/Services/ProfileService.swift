@@ -46,7 +46,7 @@ final class ProfileService {
 
 extension ProfileService {
     private func makeRequest(token: String, path: String) -> URLRequest? {
-        var request = URLRequest.makeHTTPRequest(path: path, httpMethod: "GET")
+        var request = URLRequest.makeHTTPRequest(path: path, httpMethod: "GET", baseURL: DefaultBaseApiUrl)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
@@ -59,22 +59,22 @@ struct Profile {
     let bio: String?
     
     init(result: ProfileResult) {
-        self.username = result.username
-        self.name = (result.firstName) + " " + (result.lastName)
-        self.loginName = "@" + (result.username)
+        self.username = result.username ?? ""
+        self.name = [result.firstName, result.lastName].compactMap { $0 }.joined(separator: " ")
+        self.loginName = "@" + (result.username ?? "")
         self.bio = result.bio
     }
 }
 
 struct ProfileResult: Decodable {
-    let username: String
-    let firstName: String
-    let lastName: String
+    let username: String?
+    let firstName: String?
+    let lastName: String?
     let bio: String?
     
-    enum CodingKeys: String, CodingKey {
-        case firstName = "first_name"
-        case lastName = "last_name"
-        case username, bio
-    }
+//    enum CodingKeys: String, CodingKey {
+//        case firstName = "first_name"
+//        case lastName = "last_name"
+//        case username, bio
+//    }
 }

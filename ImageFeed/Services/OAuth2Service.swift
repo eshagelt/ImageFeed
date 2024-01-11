@@ -26,7 +26,7 @@ final class OAuth2Service {
     
     private init() { }
 
-    func fetchAuthToken(
+    func fetchOAuthToken(
         _ code: String,
         completion: @escaping (Result<String, Error>) -> Void
     ) {
