@@ -14,11 +14,6 @@ final class ProfileViewController: UIViewController {
     private let profileImageService = ProfileImageService.shared
     
     private let avatarImageView = UIImageView()
-//    private let logoutButton = UIButton.systemButton(
-//        with: UIImage(named: "logoutButton") ?? UIImage(systemName: "ipad.and.arrow.forward")!,
-//        target: ProfileViewController.self,
-//        action: #selector(Self.didTapButton)
-//    )
     
     private lazy var logoutButton: UIButton = {
         let button = UIButton.systemButton(
@@ -26,9 +21,6 @@ final class ProfileViewController: UIViewController {
             target: self,
             action: #selector(didTapButton)
         )
-   //     button.addAction(UIAction(title: "Button Title", handler: { _ in
-     //       print("Button tapped!")
-       // }), for: .touchUpInside)
         return button
     }()
     

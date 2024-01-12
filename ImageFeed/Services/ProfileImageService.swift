@@ -20,7 +20,7 @@ final class ProfileImageService {
         let profileImage: ProfileImageUrl
         
         enum CodingKeys: String, CodingKey {
-            case profileImage = "profile_image"
+            case profileImage = "profileImage"
         }
     }
     
