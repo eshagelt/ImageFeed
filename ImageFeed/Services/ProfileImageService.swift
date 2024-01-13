@@ -9,32 +9,12 @@ import Foundation
 
 final class ProfileImageService {
     static let shared = ProfileImageService()
-    static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     private (set) var avatarURL: String?
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     
     private init() {}
-    
-    struct UserResult: Codable {
-        let profileImage: ProfileImageUrl
-        
-        enum CodingKeys: String, CodingKey {
-            case profileImage = "profileImage"
-        }
-    }
-    
-    struct ProfileImageUrl: Codable {
-        let small: String
-        let medium: String
-        let large: String
-        
-        enum CodingKeys: String, CodingKey {
-            case small
-            case medium
-            case large
-        }
-    }
     
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
@@ -57,7 +37,7 @@ final class ProfileImageService {
                 
                 NotificationCenter.default
                     .post(
-                        name: ProfileImageService.DidChangeNotification,
+                        name: ProfileImageService.didChangeNotification,
                         object: self,
                         userInfo: ["URL": avatarURL])
                 
