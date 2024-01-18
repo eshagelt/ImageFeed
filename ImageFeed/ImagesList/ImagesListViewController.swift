@@ -61,23 +61,6 @@ class ImagesListViewController: UIViewController {
     }
 }
 
-extension ImagesListViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photos.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
-        
-        guard let imageListCell = cell as? ImagesListCell else {
-            return UITableViewCell()
-        }
-        
-        //imageListCell.delegate = self
-        return imageListCell
-    }
-}
-
 extension ImagesListViewController {
     private func configCell (for cell: ImagesListCell, with indexPath: IndexPath) {
         let imageURL = photos[indexPath.row].thumbImageURL
@@ -94,6 +77,11 @@ extension ImagesListViewController {
         } else {
             cell.dateLabel.text = ""
         }
+        
+        let isLiked = imagesListService.photos[indexPath.row].isLiked == false
+        let likeImage = isLiked ? UIImage(named: "like_button_off") : UIImage(named: "like_button_on")
+        cell.likeButton.setImage(likeImage, for: .normal)
+        cell.selectionStyle = .none
     }
 }
 
@@ -109,13 +97,58 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let image = photos[indexPath.row]
-        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-        let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
-        let imageWidth = image.size.width
-        let scale = imageViewWidth / imageWidth
-        let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
-        return cellHeight
+        let cell = photos[indexPath.row]
+        let imageSize = CGSize(width: cell.width, height: cell.height)
+        let aspectRatio = imageSize.width / imageSize.height
+        return tableView.frame.width / aspectRatio
+    }
+}
+
+extension ImagesListViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return photos.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
+        
+        guard let imageListCell = cell as? ImagesListCell else {
+            return UITableViewCell()
+        }
+        
+        imageListCell.delegate = self
+        configCell(for: imageListCell, with: indexPath)
+        return imageListCell
+    }
+}
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+            guard let indexPath = tableView.indexPath(for: cell) else { return }
+            let photo = photos[indexPath.row]
+            UIBlockingProgressHUD.show()
+            imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) {result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        self.photos = self.imagesListService.photos
+                        cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
+                        UIBlockingProgressHUD.dismiss()
+                    case .failure(let error):
+                        UIBlockingProgressHUD.dismiss()
+                        self.showLikeErrorAlert(with: error)
+                    }
+                }
+            }
+        }
+    
+    private func showLikeErrorAlert(with error: Error) {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось поставить лайк",
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        self.present(alert, animated: true, completion: nil)
     }
 }
 
