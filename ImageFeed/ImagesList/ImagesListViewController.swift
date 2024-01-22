@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class ImagesListViewController: UIViewController {
     
@@ -18,11 +19,10 @@ class ImagesListViewController: UIViewController {
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .long
+        formatter.dateStyle = .medium
         formatter.timeStyle = .none
         return formatter
     }()
-
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -72,8 +72,9 @@ extension ImagesListViewController {
             self.tableView.reloadRows(at: [indexPath], with: .automatic)
             cell.cellImage.kf.indicatorType = .none
         }
+        
         if let date = imagesListService.photos[indexPath.row].createdAt {
-            cell.dateLabel.text = dateFormatter.string(from: date)
+                    cell.dateLabel.text = dateFormatter.string(from: date)
         } else {
             cell.dateLabel.text = ""
         }
@@ -124,23 +125,24 @@ extension ImagesListViewController: UITableViewDataSource {
 
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
-            guard let indexPath = tableView.indexPath(for: cell) else { return }
-            let photo = photos[indexPath.row]
-            UIBlockingProgressHUD.show()
-            imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) {result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        self.photos = self.imagesListService.photos
-                        cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
-                        UIBlockingProgressHUD.dismiss()
-                    case .failure(let error):
-                        UIBlockingProgressHUD.dismiss()
-                        self.showLikeErrorAlert(with: error)
-                    }
+        guard let indexPath = tableView.indexPath(for: cell)
+        else { return }
+        let photo = photos[indexPath.row]
+        UIBlockingProgressHUD.show()
+        imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case.success:
+                    self.photos = self.imagesListService.photos
+                    cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
+                    UIBlockingProgressHUD.dismiss()
+                case.failure(let error):
+                    UIBlockingProgressHUD.dismiss()
+                    self.showLikeErrorAlert(with: error)
                 }
             }
         }
+    }
     
     private func showLikeErrorAlert(with error: Error) {
         let alert = UIAlertController(

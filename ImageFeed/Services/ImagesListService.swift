@@ -23,7 +23,6 @@ final class ImagesListService {
         assert(Thread.isMainThread)
         guard task == nil else { return }
         
-        //let page = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         guard let token = oauth2TokenStorage.token else { return }
         guard let request = fetchImagesListRequest(token, page: lastLoadedPage) else { return }
         
@@ -82,17 +81,17 @@ final class ImagesListService {
             self.task = nil
             switch result {
             case .success(let photoResult):
-                let isLiked = photoResult.photo?.isLiked ?? false
-                if let index = self.photos.firstIndex(where: { $0.id == photoResult.photo?.id}) {
-                    let photo = self.photos[index]
-                    let newPhoto = Photo(id: photo.id,
-                                         width: photo.width,
-                                         height: photo.height,
-                                         createdAt: photo.createdAt,
-                                         welcomeDescription: photo.welcomeDescription,
-                                         thumbImageURL: photo.thumbImageURL, largeImageURL: photo.largeImageURL, isLiked: isLiked
-                    )
-                    self.photos = self.photos.withReplaced(itemAt: index, newValue: newPhoto)
+                DispatchQueue.main.async {
+                    if let index = self.photos.firstIndex(where: { $0.id == photoResult.photo?.id}) {
+                        let photo = self.photos[index]
+                        let newPhoto = Photo(id: photo.id,
+                                             width: photo.width,
+                                             height: photo.height,
+                                             createdAt: photo.createdAt,
+                                             welcomeDescription: photo.welcomeDescription,
+                                             thumbImageURL: photo.thumbImageURL, largeImageURL: photo.largeImageURL, isLiked: !photo.isLiked)
+                        self.photos = self.photos.withReplaced(itemAt: index, newValue: newPhoto)
+                    }
                 }
                 completion(.success(()))
             case .failure(let error):
@@ -130,7 +129,7 @@ private extension ImagesListService {
             path: "/photos?page=\(page)&&per_page=\(perPage)",
             httpMethod: "GET",
             baseURL: URL(string: "\(DefaultBaseApiUrl)")!)
-        request.setValue("Bearer\(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
 }

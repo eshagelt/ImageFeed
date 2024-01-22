@@ -39,8 +39,8 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="31 августа 2023" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tBs-Cl-xgO" userLabel="Date Label">
-                                                    <rect key="frame" x="24.000000000000007" y="196.33333333333334" width="100.66666666666669" height="15.666666666666657"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="31 августа" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tBs-Cl-xgO" userLabel="Date Label">
+                                                    <rect key="frame" x="24" y="196.33333333333334" width="65.333333333333329" height="15.666666666666657"/>
                                                     <rect key="contentStretch" x="0.90000000000000002" y="1" width="1" height="1"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -51,7 +51,7 @@
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" image="like_button_on"/>
                                                     <connections>
-                                                        <action selector="likeButtonClicked:" destination="Aat-Jv-z12" eventType="touchUpInside" id="ups-6K-kqu"/>
+                                                        <action selector="likeButtonTapped:" destination="Aat-Jv-z12" eventType="touchUpInside" id="yy9-d7-FZp"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -100,7 +100,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-718" y="-1871"/>
+            <point key="canvasLocation" x="-718.32061068702285" y="-1871.1267605633805"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="oMV-bu-6Jc">
