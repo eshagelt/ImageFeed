@@ -105,7 +105,7 @@ final class ProfileViewController: UIViewController {
     private func didTapLogOutButton(_ sender: Any?) {
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
         
-        let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+        let acceptAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
             guard let self = self else { return }
             OAuth2TokenStorage().token = nil
             ProfileViewController.clean()
@@ -115,12 +115,12 @@ final class ProfileViewController: UIViewController {
             self.present(authViewController, animated: true, completion: nil)
         }
         
-        let action2 = UIAlertAction(title: "Нет", style: .default) { _ in
+        let deleteAction = UIAlertAction(title: "Нет", style: .default) { _ in
             alert.dismiss(animated: true)
         }
         
-        alert.addAction(action1)
-        alert.addAction(action2)
+        alert.addAction(acceptAction)
+        alert.addAction(deleteAction)
         self.present(alert, animated: true)    
     }
 }

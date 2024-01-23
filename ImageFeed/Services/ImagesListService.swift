@@ -16,7 +16,7 @@ final class ImagesListService {
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
-    private var lastLoadedPage: Int = 1
+    private var lastLoadedPage: Int = 0
     private let dateFormatter = ISO8601DateFormatter()
     
     func fetchPhotosNextPage() {
@@ -33,14 +33,15 @@ final class ImagesListService {
                 switch result {
                 case .success(let photoResults):
                     for photoResult in photoResults {
-                        self.photos.append(self.convert(photoResult))
+                        self.photos.append(Photo(result: photoResult))
                     }
+                    
+                    self.lastLoadedPage += 1
                     
                     NotificationCenter.default.post(
                         name: ImagesListService.didChangeNotification,
                         object: self,
                         userInfo: ["Photos": self.photos])
-                    self.lastLoadedPage += 1
                     
                 case .failure(let error):
                     assertionFailure("Ошибка получения изображений \(error)")
@@ -52,21 +53,10 @@ final class ImagesListService {
         task.resume()
     }
     
-    private func convert(_ photoResult: PhotoResult) -> Photo {
-        return Photo.init(id: photoResult.id,
-                          width: photoResult.width,
-                          height: photoResult.height,
-                          createdAt: self.dateFormatter.date(from: photoResult.createdAt ?? ""),
-                          welcomeDescription: photoResult.welcomeDescription,
-                          thumbImageURL: photoResult.urls?.thumbImageURL ?? "",
-                          largeImageURL: photoResult.urls?.largeImageURL ?? "",
-                          isLiked: photoResult.isLiked ?? false)
-    }
-    
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
         assert(Thread.isMainThread)
         task?.cancel()
-
+        
         guard let token = oauth2TokenStorage.token else { return }
         var request: URLRequest?
         if isLike {
@@ -74,7 +64,7 @@ final class ImagesListService {
         } else {
             request = likeRequest(token, photoId: photoId)
         }
-
+        
         guard let request = request else { return }
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<LikePhotoResult, Error>) in
             guard let self = self else { return }
@@ -101,25 +91,17 @@ final class ImagesListService {
         self.task = task
         task.resume()
     }
-
+    
     func likeRequest(_ token: String, photoId: String) -> URLRequest? {
         var request = URLRequest.makeHTTPRequest(path: "photos/\(photoId)/like", httpMethod: "POST", baseURL: DefaultBaseApiUrl)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
-
+    
     func deleteLikeRequest(_ token: String, photoId: String) -> URLRequest? {
         var request = URLRequest.makeHTTPRequest(path: "photos/\(photoId)/like", httpMethod: "DELETE", baseURL: DefaultBaseApiUrl)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
-    }
-}
-
-extension Array {
-    func withReplaced(itemAt: Int, newValue: Photo) -> [Photo] {
-        var photos = ImagesListService.shared.photos
-        photos.replaceSubrange(itemAt...itemAt, with: [newValue])
-        return photos
     }
 }
 

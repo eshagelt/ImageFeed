@@ -16,13 +16,7 @@ class ImagesListViewController: UIViewController {
     private let imagesListService = ImagesListService.shared
     private var photos: [Photo] = []
     private var imagesListServiceObserver: NSObjectProtocol?
-    
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter
-    }()
+    private let dateFormatter = CustomDateFormatters.shared.dateFormatter
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -74,9 +68,7 @@ extension ImagesListViewController {
         }
         
         if let date = imagesListService.photos[indexPath.row].createdAt {
-                    cell.dateLabel.text = dateFormatter.string(from: date)
-        } else {
-            cell.dateLabel.text = ""
+            cell.dateLabel.text = dateFormatter.string(from: date as Date).replacingOccurrences(of: "r.", with: "")
         }
         
         let isLiked = imagesListService.photos[indexPath.row].isLiked == false

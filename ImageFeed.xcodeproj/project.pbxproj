@@ -36,6 +36,9 @@
 		5DA45E772AA49EEE0002DC9A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA45E762AA49EEE0002DC9A /* Colors.swift */; };
 		5DA45E7A2AAF3E400002DC9A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA45E792AAF3E400002DC9A /* ProfileViewController.swift */; };
 		5DA45E7E2AB0FFA30002DC9A /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA45E7D2AB0FFA30002DC9A /* SingleImageViewController.swift */; };
+		5DA9925D2B5FED02002797D5 /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA9925C2B5FED02002797D5 /* PhotoModel.swift */; };
+		5DA992602B5FEDB7002797D5 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA9925F2B5FEDB7002797D5 /* DateFormatter.swift */; };
+		5DA992622B5FEF2F002797D5 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA992612B5FEF2F002797D5 /* Array.swift */; };
 		5DBE29772B3DDA0E003EBECE /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBE29762B3DDA0E003EBECE /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +82,9 @@
 		5DA45E762AA49EEE0002DC9A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		5DA45E792AAF3E400002DC9A /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		5DA45E7D2AB0FFA30002DC9A /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
+		5DA9925C2B5FED02002797D5 /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
+		5DA9925F2B5FEDB7002797D5 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		5DA992612B5FEF2F002797D5 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		5DBE29762B3DDA0E003EBECE /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -159,6 +165,7 @@
 				5D9FF9FA2ACC9C2E0034F00A /* OAuthTokenResponseBody.swift */,
 				5D72CB9B2B52F49E00EC1761 /* ProfileImageResponceModel.swift */,
 				5D72CB9F2B52FE9500EC1761 /* PhotoResultResponseModel.swift */,
+				5DA9925C2B5FED02002797D5 /* PhotoModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -207,6 +214,8 @@
 			children = (
 				5DA45E762AA49EEE0002DC9A /* Colors.swift */,
 				5D9FFA132AFD11C00034F00A /* URLSession.swift */,
+				5DA9925F2B5FEDB7002797D5 /* DateFormatter.swift */,
+				5DA992612B5FEF2F002797D5 /* Array.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -334,10 +343,12 @@
 				5D9FF9FB2ACC9C2E0034F00A /* OAuthTokenResponseBody.swift in Sources */,
 				5DA45E772AA49EEE0002DC9A /* Colors.swift in Sources */,
 				5D9FFA022AD43B870034F00A /* SplashViewController.swift in Sources */,
+				5DA992602B5FEDB7002797D5 /* DateFormatter.swift in Sources */,
 				5D9FF9F72ACC781E0034F00A /* OAuth2Service.swift in Sources */,
 				5D9FF9F02AC31CEA0034F00A /* AuthViewController.swift in Sources */,
 				5D9FF9F22AC32D280034F00A /* WebViewViewController.swift in Sources */,
 				5D9FFA142AFD11C00034F00A /* URLSession.swift in Sources */,
+				5DA992622B5FEF2F002797D5 /* Array.swift in Sources */,
 				5D72CB9C2B52F49E00EC1761 /* ProfileImageResponceModel.swift in Sources */,
 				5D9FF9F92ACC8F8B0034F00A /* OAuth2TokenStorage.swift in Sources */,
 				5D5B97422A9F90280064511F /* ImagesListCell.swift in Sources */,
@@ -353,6 +364,7 @@
 				5D9FF9FF2ACCA8420034F00A /* AuthViewControllerDelegate.swift in Sources */,
 				5D9FFA122AED19960034F00A /* ProfileImageService.swift in Sources */,
 				5D9FF9ED2ABF01B50034F00A /* Constants.swift in Sources */,
+				5DA9925D2B5FED02002797D5 /* PhotoModel.swift in Sources */,
 				5D9FFA0D2AE41B540034F00A /* UIBlockingProgressHUD.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
