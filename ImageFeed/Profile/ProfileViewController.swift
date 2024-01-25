@@ -35,6 +35,8 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .ypBackground
+        
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
                 forName: ProfileImageService.didChangeNotification,
@@ -107,12 +109,7 @@ final class ProfileViewController: UIViewController {
         
         let acceptAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
             guard let self = self else { return }
-            OAuth2TokenStorage().token = nil
-            ProfileViewController.clean()
-            guard let authViewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
-            authViewController.delegate = self.splashViewController
-            authViewController.modalPresentationStyle = .fullScreen
-            self.present(authViewController, animated: true, completion: nil)
+            self.logout()
         }
         
         let deleteAction = UIAlertAction(title: "Нет", style: .default) { _ in
@@ -122,6 +119,14 @@ final class ProfileViewController: UIViewController {
         alert.addAction(acceptAction)
         alert.addAction(deleteAction)
         self.present(alert, animated: true)    
+    }
+    
+    private func logout() {
+        OAuth2TokenStorage.shared.removeToken()
+        ProfileViewController.clean()
+        guard let window = UIApplication.shared.windows.first else { return assertionFailure("Invalid Configuration") }
+                    window.rootViewController = SplashViewController()
+                    window.makeKeyAndVisible()
     }
 }
 

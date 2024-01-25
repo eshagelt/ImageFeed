@@ -16,7 +16,7 @@ final class ImagesListService {
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
-    private var lastLoadedPage: Int = 0
+    private var lastLoadedPage: Int = 1
     private let dateFormatter = ISO8601DateFormatter()
     
     func fetchPhotosNextPage() {
