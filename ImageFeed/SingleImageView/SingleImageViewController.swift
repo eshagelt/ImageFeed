@@ -8,11 +8,10 @@
 import UIKit
 
 final class SingleImageViewController: UIViewController {
-    var image: UIImage! {
+    var imageURL: URL? {
         didSet {
             guard isViewLoaded else { return }
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)
+            setImage()
         }
     }
     
@@ -23,11 +22,9 @@ final class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard image != nil else { return }
-        imageView.image = image
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
-        rescaleAndCenterImageInScrollView(image: image)
+        setImage()
     }
     
     @IBAction private func didTapBackButton(_ sender: Any) {
@@ -35,9 +32,8 @@ final class SingleImageViewController: UIViewController {
     }
     
     @IBAction private func didTapShareButton(_ sender: UIButton) {
-        guard let image else { return }
         let share = UIActivityViewController(
-            activityItems: [image],
+            activityItems: [imageView.image as Any],
             applicationActivities: nil)
         present(share, animated: true, completion: nil)
     }
@@ -57,6 +53,20 @@ final class SingleImageViewController: UIViewController {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+    }
+    
+    private func setImage() {
+        UIBlockingProgressHUD.show()
+        imageView.kf.setImage(with: imageURL) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                print("error")
+            }
+            UIBlockingProgressHUD.dismiss()
+        }
     }
 }
 

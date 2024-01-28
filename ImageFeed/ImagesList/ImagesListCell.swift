@@ -7,19 +7,28 @@
 
 import UIKit
 
+protocol ImagesListCellDelegate: AnyObject {
+    func imageListCellDidTapLike(_ cell: ImagesListCell)
+}
+
 final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
+    weak var delegate: ImagesListCellDelegate?
+    @IBOutlet weak var cellImage: UIImageView!
+    @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var dateLabel: UILabel!
     
-    @IBOutlet private var cellImage: UIImageView?
-    @IBOutlet private var likeButton: UIButton!
-    @IBOutlet private var dateLabel: UILabel!
+    @IBAction func likeButtonTapped(_ sender: UIButton) {
+        delegate?.imageListCellDidTapLike(self)
+    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cellImage.kf.cancelDownloadTask()
+    }
     
-    func configCell(image: UIImage, date: String, isLiked: Bool) {
-        
-        cellImage?.image = image
-        backgroundColor = UIColor(named: "YP Black")
-        dateLabel.text = Date().dateTimeString
+    public func setIsLiked(isLiked: Bool) {
         let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+        likeButton.imageView?.image = likeImage
         likeButton.setImage(likeImage, for: .normal)
     }
 }

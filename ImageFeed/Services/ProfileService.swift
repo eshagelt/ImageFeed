@@ -19,7 +19,7 @@ final class ProfileService {
     func fetchProfile(authToken: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         assert(Thread.isMainThread)
         
-        if profile != nil { return }
+        if task != nil { return }
         task?.cancel()
         
         guard let request = makeRequest(token: authToken, path: "/me") else { return }
