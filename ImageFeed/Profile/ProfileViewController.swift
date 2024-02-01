@@ -9,7 +9,16 @@ import UIKit
 import Kingfisher
 import WebKit
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func viewDidLoad()
+    func updateProfileDetails(profile: Profile?)
+    func updateAvatar(url: URL)
+}
+
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+    
+    var presenter: ProfileViewPresenterProtocol?
     
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
@@ -25,18 +34,27 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     
-    private let nameLabel = UILabel()
-    private let loginNameLabel = UILabel()
-    private let descriptionLabel = UILabel()
+    lazy var nameLabel = UILabel()
+    lazy var loginNameLabel = UILabel()
+    lazy var descriptionLabel = UILabel()
     
     private var profileImageServiceObserver: NSObjectProtocol?
     private let splashViewController = SplashViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .ypBackground
         
+        let presenter = ProfileViewPresenter(view: self)
+        
+        setUpView()
+        setUpConstraints()
+        setupNotificationObserver()
+        presenter.viewDidLoad()
+        
+    }
+    
+    func setupNotificationObserver() {
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
                 forName: ProfileImageService.didChangeNotification,
@@ -44,16 +62,10 @@ final class ProfileViewController: UIViewController {
                 queue: .main
             ) { [weak self] _ in
                 guard let self = self else { return }
-                self.updateAvatar()
             }
-        updateAvatar()
-        
-        setUpView()
-        setUpConstraints()
-        updateProfileDetails(profile: profileService.profile)
     }
     
-    private func setUpView() {
+    func setUpView() {
         avatarImageView.image = UIImage(named: "avatar") ?? UIImage(systemName: "person.crop.circle.fill")
         avatarImageView.layer.cornerRadius = 32
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -131,27 +143,26 @@ final class ProfileViewController: UIViewController {
 }
 
 extension ProfileViewController {
-    private func updateProfileDetails(profile: Profile?) {
-        guard let profile = profile else { return }
-        nameLabel.text = profile.name
-        loginNameLabel.text = profile.loginName
-        descriptionLabel.text = profile.bio
+    func updateAvatar(url: URL) {
+            let processor = RoundCornerImageProcessor(cornerRadius: 61)
+            avatarImageView.kf.indicatorType = .activity
+            avatarImageView.kf.setImage(with: url,
+                                     placeholder: UIImage(named: "placeholder"),
+                                        options: [.processor(processor)])
+            avatarImageView.layer.cornerRadius = 35
+            avatarImageView.layer.masksToBounds = true
     }
-}
-
-extension ProfileViewController {
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        let processor = RoundCornerImageProcessor(cornerRadius: 61)
-        avatarImageView.kf.indicatorType = .activity
-        avatarImageView.kf.setImage(with: url,
-                                 placeholder: UIImage(named: "placeholder"),
-                                    options: [.processor(processor)])
-        avatarImageView.layer.cornerRadius = 35
-        avatarImageView.layer.masksToBounds = true
+    
+    func updateProfileDetails(profile: Profile?) {
+        if let profile {
+            nameLabel.text = profile.name
+            loginNameLabel.text = profile.loginName
+            descriptionLabel.text = profile.bio
+        } else {
+            nameLabel.text = ""
+            loginNameLabel.text = ""
+            descriptionLabel.text = ""
+        }
     }
 }
 

@@ -8,9 +8,17 @@
 import UIKit
 import Kingfisher
 
-class ImagesListViewController: UIViewController {
-    
+public protocol ImagesListViewControllerProtocol: AnyObject {
+    var presenter: ImagesListViewPresenterProtocol? { get set }
+    func viewDidLoad()
+    func updateTableViewAnimated()
+}
+
+class ImagesListViewController: UIViewController, ImagesListViewControllerProtocol {
+
     @IBOutlet private var tableView: UITableView!
+    
+    var presenter: ImagesListViewPresenterProtocol?
     
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private let imagesListService = ImagesListService.shared
@@ -24,19 +32,9 @@ class ImagesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter?.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         tableView.backgroundColor = .ypBackground
-
-        imagesListServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ImagesListService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateTableViewAnimated()
-            }
-        imagesListService.fetchPhotosNextPage()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -52,6 +50,19 @@ class ImagesListViewController: UIViewController {
             viewController.imageURL = imageURL
         } else {
             super.prepare(for: segue, sender: sender)
+        }
+    }
+    
+    func updateTableViewAnimated() {
+        let oldCount = photos.count
+        let newCount = imagesListService.photos.count
+        photos = imagesListService.photos
+        
+        if oldCount != newCount {
+            tableView.performBatchUpdates {
+                let indexPaths = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
+                tableView.insertRows(at: indexPaths, with: .automatic)
+            } completion: { _ in }
         }
     }
 }
@@ -138,26 +149,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
     }
     
     private func showLikeErrorAlert(with error: Error) {
-        let alert = UIAlertController(
-            title: "Что-то пошло не так(",
-            message: "Не удалось поставить лайк",
-            preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-        self.present(alert, animated: true, completion: nil)
-    }
-}
-
-extension ImagesListViewController {
-    func updateTableViewAnimated() {
-        let oldCount = photos.count
-        let newCount = imagesListService.photos.count
-        photos = imagesListService.photos
-        
-        if oldCount != newCount {
-            tableView.performBatchUpdates {
-                let indexPaths = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
-                tableView.insertRows(at: indexPaths, with: .automatic)
-            } completion: { _ in }
-        }
+        guard let alert = presenter?.makeAlert(with: Error.self as! Error) else { return }
+        present(alert, animated: true, completion: nil)
     }
 }

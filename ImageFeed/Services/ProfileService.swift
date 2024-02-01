@@ -52,7 +52,7 @@ extension ProfileService {
     }
 }
 
-struct Profile {
+public struct Profile {
     let username: String
     let name: String
     let loginName: String
@@ -66,7 +66,7 @@ struct Profile {
     }
 }
 
-struct ProfileResult: Decodable {
+public struct ProfileResult: Decodable {
     let username: String?
     let firstName: String?
     let lastName: String?
