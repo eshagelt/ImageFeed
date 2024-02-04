@@ -7,37 +7,29 @@
 
 import UIKit
 
-public protocol ImagesListViewPresenterProtocol: AnyObject {
+public protocol ImagesListViewPresenterProtocol {
     var view: ImagesListViewControllerProtocol? { get set }
+    var imagesListService: ImagesListService { get }
     func viewDidLoad()
-    func makeAlert(with error: Error) -> UIAlertController
+    func presentChangeLikeResult(photo: Photo, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
-class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
+final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     weak var view: ImagesListViewControllerProtocol?
     private var imagesListServiceObserver: NSObjectProtocol?
-    private let imagesListService = ImagesListService()
+    let imagesListService = ImagesListService.shared
+    
+    var photos: [Photo] = []
     
     func viewDidLoad() {
-        imagesListServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ImagesListService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                view?.updateTableViewAnimated()
-            }
+        fetchPhotos()
+    }
+    
+    func fetchPhotos() {
         imagesListService.fetchPhotosNextPage()
     }
     
-    func makeAlert(with error: Error) -> UIAlertController {
-        let alert = UIAlertController(
-            title: "Что-то пошло не так(",
-            message: "Не удалось поставить лайк",
-            preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-        alert.dismiss(animated: true)
-        return alert
-    }
+    func presentChangeLikeResult(photo: Photo, completion: @escaping (Result<Void, Error>) -> Void) {
+            imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked, completion)
+        }
 }

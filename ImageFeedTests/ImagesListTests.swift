@@ -11,8 +11,9 @@ import XCTest
 final class ImagesListTests: XCTestCase {
     func testViewControllerCallsViewDidLoad() {
         //given
+        let imagesListService = ImagesListService()
         let viewController = ImagesListViewControllerSpy()
-        let presenter = ImagesListViewPresenterSpy()
+        let presenter = ImagesListViewPresenterSpy(imagesListService: imagesListService)
         viewController.presenter = presenter
         presenter.view = viewController
         
@@ -26,12 +27,13 @@ final class ImagesListTests: XCTestCase {
     func testDidUpdateTableView() {
         //given
         let viewController = ImagesListViewControllerSpy()
-        let presenter = ImagesListViewPresenterSpy()
+        let imagesListService = ImagesListService()
+        let presenter = ImagesListViewPresenterSpy(imagesListService: imagesListService)
         viewController.presenter = presenter
         presenter.view = viewController
         
         //when
-        presenter.fetchPhotosNextPage()
+        presenter.fetchPhotos()
         
         //then
         XCTAssertTrue(viewController.didUpdateTableView)
