@@ -14,10 +14,6 @@ final class ProfileViewControllerSpy: ProfileViewControllerProtocol {
     var didUpdateAvatar: Bool = false
     var didUpdateProfileDetails: Bool = false
     
-    func viewDidLoad() {
-        presenter?.viewDidLoad()
-    }
-    
     func updateProfileDetails(profile: ImageFeed.Profile?) {
         didUpdateProfileDetails = true
     }

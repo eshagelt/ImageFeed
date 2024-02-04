@@ -11,7 +11,6 @@ import WebKit
 
 public protocol ProfileViewControllerProtocol: AnyObject {
     var presenter: ProfileViewPresenterProtocol? { get set }
-    func viewDidLoad()
     func updateProfileDetails(profile: Profile?)
     func updateAvatar(url: URL)
 }

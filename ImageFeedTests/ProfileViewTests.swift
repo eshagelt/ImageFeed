@@ -18,6 +18,7 @@ final class ProfileViewTests: XCTestCase {
         
         //when
         _ = viewController.view
+        presenter.viewDidLoad()
         
         //then
         XCTAssertTrue(presenter.viewDidLoadCalled)
