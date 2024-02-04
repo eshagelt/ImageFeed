@@ -30,7 +30,7 @@ final class ProfileViewTests: XCTestCase {
         viewController.presenter = presenter
         presenter.view = viewController
         
-        let url = DefaultBaseUrl
+        let url = ApiConstants.DefaultBaseUrl
         
         //when
         presenter.view?.updateAvatar(url: url)

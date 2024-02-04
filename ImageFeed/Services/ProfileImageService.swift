@@ -58,7 +58,7 @@ private extension ProfileImageService {
         
         var request = URLRequest.makeHTTPRequest(path: "/users/\(username)",
                                                  httpMethod: "GET",
-                                                 baseURL: DefaultBaseApiUrl)
+                                                 baseURL: ApiConstants.DefaultBaseApiUrl)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }

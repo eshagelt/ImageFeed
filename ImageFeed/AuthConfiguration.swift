@@ -7,15 +7,6 @@
 
 import Foundation
 
-let AccessKey = "0RGQNJ9sxsXitjrwgcIRzNznsyygE8l8ZBPv3u8F1_s"
-let SecretKey = "PGP5ucItXRWHTu9GbUoeXbe8LVr47vnLoxkLqNV2ZjI"
-let RedirectURL = "urn:ietf:wg:oauth:2.0:oob"
-
-let AccessScope = "public+read_user+write_likes"
-let DefaultBaseUrl = URL(string: "https://unsplash.com")!
-let DefaultBaseApiUrl = URL(string: "https://api.unsplash.com/")!
-let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
-
 struct AuthConfiguration {
     let accessKey: String
     let secretKey: String
@@ -26,13 +17,13 @@ struct AuthConfiguration {
     let authURLString: String
     
     static var standard: AuthConfiguration {
-        return AuthConfiguration(accessKey: AccessKey,
-                                 secretKey: SecretKey,
-                                 redirectURL: RedirectURL,
-                                 accessScope: AccessScope,
-                                 defaultBaseURL: DefaultBaseUrl,
-                                 defaultBaseApiURL: DefaultBaseApiUrl,
-                                 authURLString: UnsplashAuthorizeURLString
+        return AuthConfiguration(accessKey: ApiConstants.AccessKey,
+                                 secretKey: ApiConstants.SecretKey,
+                                 redirectURL: ApiConstants.RedirectURL,
+                                 accessScope: ApiConstants.AccessScope,
+                                 defaultBaseURL: ApiConstants.DefaultBaseUrl,
+                                 defaultBaseApiURL: ApiConstants.DefaultBaseApiUrl,
+                                 authURLString: ApiConstants.UnsplashAuthorizeURLString
         )
     }
     

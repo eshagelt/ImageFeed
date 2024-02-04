@@ -31,6 +31,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             target: self,
             action: #selector(didTapLogOutButton)
         )
+        button.accessibilityIdentifier = "logoutButton"
         return button
     }()
     

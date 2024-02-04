@@ -25,16 +25,16 @@ final class ImageFeedUITests: XCTestCase {
         
         let webView = app.webViews["UnsplashWebView"]
         XCTAssertTrue(webView.waitForExistence(timeout: 5))
-
+        
         let loginTextField = webView.descendants(matching: .textField).element
-        XCTAssertTrue(webView.waitForExistence(timeout: 5))
+        XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         
         loginTextField.tap()
         loginTextField.typeText(login)
         webView.swipeUp()
         
         let passwordTextField = webView.descendants(matching: .secureTextField).element
-        XCTAssertTrue(webView.waitForExistence(timeout: 5))
+        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
         
         passwordTextField.tap()
         passwordTextField.typeText(password)
@@ -57,10 +57,11 @@ final class ImageFeedUITests: XCTestCase {
         
         sleep(2)
         
-        let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 0)
+        let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
         
-        cellToLike.buttons["like_button_off"].tap()
-        cellToLike.buttons["like_button_on"].tap()
+        cellToLike.buttons["like button"].tap()
+        sleep(2)
+        cellToLike.buttons["like button"].tap()
         
         sleep(2)
         
@@ -78,7 +79,7 @@ final class ImageFeedUITests: XCTestCase {
     
     func testProfile() throws {
         sleep(2)
-        app.tabBars.buttons.element(boundBy: 0).tap()
+        app.tabBars.buttons.element(boundBy: 1).tap()
         
         XCTAssertTrue(app.staticTexts["\(fullName)"].exists)
         XCTAssertTrue(app.staticTexts["\(userName)"].exists)

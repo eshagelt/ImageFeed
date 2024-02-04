@@ -93,13 +93,13 @@ public final class ImagesListService {
     }
     
     func likeRequest(_ token: String, photoId: String) -> URLRequest? {
-        var request = URLRequest.makeHTTPRequest(path: "photos/\(photoId)/like", httpMethod: "POST", baseURL: DefaultBaseApiUrl)
+        var request = URLRequest.makeHTTPRequest(path: "photos/\(photoId)/like", httpMethod: "POST", baseURL: ApiConstants.DefaultBaseApiUrl)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
     
     func deleteLikeRequest(_ token: String, photoId: String) -> URLRequest? {
-        var request = URLRequest.makeHTTPRequest(path: "photos/\(photoId)/like", httpMethod: "DELETE", baseURL: DefaultBaseApiUrl)
+        var request = URLRequest.makeHTTPRequest(path: "photos/\(photoId)/like", httpMethod: "DELETE", baseURL: ApiConstants.DefaultBaseApiUrl)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
@@ -110,7 +110,7 @@ private extension ImagesListService {
         var request = URLRequest.makeHTTPRequest(
             path: "/photos?page=\(page)&&per_page=\(perPage)",
             httpMethod: "GET",
-            baseURL: URL(string: "\(DefaultBaseApiUrl)")!)
+            baseURL: URL(string: "\(ApiConstants.DefaultBaseApiUrl)")!)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }

@@ -46,7 +46,7 @@ final class ProfileService {
 
 extension ProfileService {
     private func makeRequest(token: String, path: String) -> URLRequest? {
-        var request = URLRequest.makeHTTPRequest(path: path, httpMethod: "GET", baseURL: DefaultBaseApiUrl)
+        var request = URLRequest.makeHTTPRequest(path: path, httpMethod: "GET", baseURL: ApiConstants.DefaultBaseApiUrl)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }

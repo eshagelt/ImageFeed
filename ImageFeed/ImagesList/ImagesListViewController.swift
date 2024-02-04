@@ -141,6 +141,7 @@ extension ImagesListViewController: UITableViewDataSource {
         }
         
         imageListCell.delegate = self
+        imageListCell.likeButton.accessibilityIdentifier = "like button"
         configCell(for: imageListCell, with: indexPath)
         return imageListCell
     }
