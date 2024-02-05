@@ -57,13 +57,13 @@ private extension OAuth2Service {
     private func authTokenRequest(code: String) -> URLRequest {
         URLRequest.makeHTTPRequest(
             path: "/oauth/token"
-            + "?client_id=\(AccessKey)"
-            + "&&client_secret=\(SecretKey)"
-            + "&&redirect_uri=\(RedirectURL)"
+            + "?client_id=\(ApiConstants.AccessKey)"
+            + "&&client_secret=\(ApiConstants.SecretKey)"
+            + "&&redirect_uri=\(ApiConstants.RedirectURL)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
-            baseURL: DefaultBaseUrl
+            baseURL: ApiConstants.DefaultBaseUrl
         )
     }
 }
@@ -72,7 +72,7 @@ extension URLRequest {
     static func makeHTTPRequest(
         path: String,
         httpMethod: String,
-        baseURL: URL = DefaultBaseUrl
+        baseURL: URL = ApiConstants.DefaultBaseUrl
     ) -> URLRequest {
 
         var request = URLRequest(url: URL(string: path, relativeTo: baseURL) ?? baseURL)

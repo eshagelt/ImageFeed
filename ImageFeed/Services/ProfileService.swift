@@ -46,13 +46,13 @@ final class ProfileService {
 
 extension ProfileService {
     private func makeRequest(token: String, path: String) -> URLRequest? {
-        var request = URLRequest.makeHTTPRequest(path: path, httpMethod: "GET", baseURL: DefaultBaseApiUrl)
+        var request = URLRequest.makeHTTPRequest(path: path, httpMethod: "GET", baseURL: ApiConstants.DefaultBaseApiUrl)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
 }
 
-struct Profile {
+public struct Profile {
     let username: String
     let name: String
     let loginName: String
@@ -66,7 +66,7 @@ struct Profile {
     }
 }
 
-struct ProfileResult: Decodable {
+public struct ProfileResult: Decodable {
     let username: String?
     let firstName: String?
     let lastName: String?
